@@ -11,6 +11,8 @@
         v-for="(item, index) in items"
         :key="index"
         :href="item"
+        target="_blank"
+        rel="noopener noreferrer"
         class="bg-white hover:bg-green-200 ease-out rounded-md border-current border px-2 py-1 shadow-local flex items-center mb-1 cursor-pointer"
       >
         <img src="favicon.ico" class="h-5 w-5" />
@@ -22,7 +24,8 @@
 
 <script lang="ts">
 import { defineComponent, computed } from 'vue'
-import { useStore, MutationTypes } from './store'
+import { useStore } from './store'
+import { MutationTypes } from './store/mutations'
 
 export default defineComponent({
   components: {},
