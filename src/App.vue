@@ -17,7 +17,7 @@
         :href="getHref(item)"
         :target="getTarget(item)"
         rel="noopener noreferrer"
-        class="bg-white hover:bg-green-200 ease-out rounded-md border-current border px-2 py-1 shadow-local flex items-center mb-1 cursor-pointer"
+        class="select-none bg-white hover:bg-green-200 ease-out rounded-md border-current border px-2 py-1 shadow-local flex items-center mb-1 cursor-pointer"
       >
         <img src="favicon.ico" class="h-5 w-5" />
         <div class="ml-2">{{ item }}</div>
