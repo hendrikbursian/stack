@@ -14,6 +14,6 @@ git config user.email "hendrikbursian@protonmail.com"
 git add -A
 git commit -m 'deploy'
 
-git push -f git@github.com:hendrikbursian/stack.git master:gh-pages
+git push -f https://github.com/hendrikbursian/stack.git master:gh-pages
 
 cd -
