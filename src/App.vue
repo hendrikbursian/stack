@@ -21,6 +21,21 @@
       >
         <img src="favicon.ico" class="h-5 w-5" />
         <div class="ml-2">{{ item }}</div>
+
+        <button class="ml-auto focus:outline-none" @click="remove(item)">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 17 17"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M8.63605 10.4138L14.8583 16.636L16.636 14.8583L10.4138 8.63606L16.636 2.41386L14.8583 0.636084L8.63605 6.85828L2.41381 0.636047L0.636037 2.41382L6.85827 8.63606L0.636032 14.8583L2.41381 16.6361L8.63605 10.4138Z"
+              fill="currentColor"
+            />
+          </svg>
+        </button>
       </a>
     </div>
   </div>
@@ -48,6 +63,10 @@ export default defineComponent({
       input.value = ''
     }
 
+    function remove(item: string) {
+      store.commit(MutationTypes.REMOVE, item)
+    }
+
     function getHref(item: string): string | undefined {
       if (!item.startsWith('http')) return
 
@@ -59,7 +78,7 @@ export default defineComponent({
       return '_blank'
     }
 
-    return { items, add, getHref, getTarget }
+    return { items, add, getHref, getTarget, remove }
   },
 
   methods: {
