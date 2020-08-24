@@ -22,7 +22,10 @@
         <img src="favicon.ico" class="h-5 w-5" />
         <div class="ml-2">{{ item }}</div>
 
-        <button class="ml-auto focus:outline-none" @click="remove(item)">
+        <button
+          class="ml-auto focus:outline-none"
+          @click.prevent="remove(item)"
+        >
           <svg
             width="12"
             height="12"
