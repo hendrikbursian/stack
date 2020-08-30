@@ -2,6 +2,7 @@
   <div id="app" class="m-4 font-sans text-darkblue">
     <div class="max-w-screen-md">
       <input
+        autofocus
         ref="input"
         class="w-full max-w-screen-sm bg-white
       rounded-md text-gray-500 hover:text-darkblue focus:text-darkblue
@@ -45,14 +46,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref, onMounted, nextTick } from 'vue'
 import { useStore } from './store'
 import { MutationTypes } from './store/mutations'
 
 export default defineComponent({
   components: {},
 
-  setup() {
+  setup(props, context) {
     const store = useStore()
     const items = computed(() => store.state.items)
 
@@ -81,20 +82,10 @@ export default defineComponent({
       return '_blank'
     }
 
-    return { items, add, getHref, getTarget, remove }
-  },
+    const input = ref(null as HTMLInputElement | null)
+    onMounted(() => input.value?.focus())
 
-  methods: {
-    focusInput() {
-      this.$nextTick(() => {
-        const input = this.$refs.input as HTMLInputElement
-        input.focus()
-      })
-    }
-  },
-
-  mounted() {
-    this.focusInput()
+    return { input, items, add, getHref, getTarget, remove }
   }
 })
 </script>
