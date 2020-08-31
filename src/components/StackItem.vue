@@ -1,0 +1,62 @@
+<template>
+  <a
+    :href="href"
+    :target="target"
+    rel="noopener noreferrer"
+    class="select-none bg-white hover:bg-green-200 ease-out rounded-md border-current border px-2 py-1 shadow-local flex items-center mb-1 cursor-pointer"
+  >
+    <img src="favicon.ico" class="h-5 w-5" />
+    <div class="ml-2">{{ item.content }}</div>
+
+    <button class="ml-auto focus:outline-none" @click.prevent="remove">
+      <svg
+        width="12"
+        height="12"
+        viewBox="0 0 17 17"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M8.63605 10.4138L14.8583 16.636L16.636 14.8583L10.4138 8.63606L16.636 2.41386L14.8583 0.636084L8.63605 6.85828L2.41381 0.636047L0.636037 2.41382L6.85827 8.63606L0.636032 14.8583L2.41381 16.6361L8.63605 10.4138Z"
+          fill="currentColor"
+        />
+      </svg>
+    </button>
+  </a>
+</template>
+
+<script lang="ts">
+import { defineComponent, computed } from 'vue'
+import { useStore } from '@/store'
+import { ActionTypes } from '@/store/actions'
+
+export default defineComponent({
+  props: {
+    itemId: {
+      default: ''
+    }
+  },
+
+  setup(props) {
+    const store = useStore()
+
+    const item = computed(() => store.getters.item(props.itemId))
+
+    const href = computed(() => {
+      if (!item.value.content.startsWith('http')) return
+
+      return item
+    })
+
+    const target = computed(() => {
+      return item.value.content.startsWith('http') ? '_blank' : '_self'
+    })
+
+    function remove() {
+      store.dispatch(ActionTypes.REMOVE, props.itemId)
+    }
+
+    return { href, target, item, remove }
+  }
+})
+</script>

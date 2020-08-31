@@ -12,80 +12,47 @@
         @keydown.enter="add"
       />
 
-      <a
-        v-for="(item, index) in items"
-        :key="index"
-        :href="getHref(item)"
-        :target="getTarget(item)"
-        rel="noopener noreferrer"
-        class="select-none bg-white hover:bg-green-200 ease-out rounded-md border-current border px-2 py-1 shadow-local flex items-center mb-1 cursor-pointer"
-      >
-        <img src="favicon.ico" class="h-5 w-5" />
-        <div class="ml-2">{{ item }}</div>
-
-        <button
-          class="ml-auto focus:outline-none"
-          @click.prevent="remove(item)"
-        >
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 17 17"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M8.63605 10.4138L14.8583 16.636L16.636 14.8583L10.4138 8.63606L16.636 2.41386L14.8583 0.636084L8.63605 6.85828L2.41381 0.636047L0.636037 2.41382L6.85827 8.63606L0.636032 14.8583L2.41381 16.6361L8.63605 10.4138Z"
-              fill="currentColor"
-            />
-          </svg>
-        </button>
-      </a>
+      <StackItem v-for="itemId in itemIds" :key="itemId" :itemId="itemId" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onMounted, nextTick } from 'vue'
+import { defineComponent, computed, ref, onMounted } from 'vue'
 import { useStore } from './store'
-import { MutationTypes } from './store/mutations'
+import StackItem from '@/components/StackItem.vue'
+import { StackItem as StackItemType } from './store/state'
+import { ActionTypes } from './store/actions'
 
 export default defineComponent({
-  components: {},
+  components: {
+    StackItem
+  },
 
-  setup(props, context) {
+  setup() {
     const store = useStore()
-    const items = computed(() => store.state.items)
+    const itemIds = computed(() => store.getters.itemIdsSortedByCreatedDesc)
 
     function add(e: KeyboardEvent) {
       const input = e.currentTarget as HTMLInputElement
 
       if (!input.value) return
-      if (items.value.indexOf(input.value) > -1) return
 
-      store.commit(MutationTypes.ADD, input.value)
+      const newItem: StackItemType = {
+        id: '',
+        created: '',
+        content: input.value
+      }
+
+      store.dispatch(ActionTypes.ADD, newItem)
+
       input.value = ''
-    }
-
-    function remove(item: string) {
-      store.commit(MutationTypes.REMOVE, item)
-    }
-
-    function getHref(item: string): string | undefined {
-      if (!item.startsWith('http')) return
-
-      return item
-    }
-
-    function getTarget(item: string): string {
-      if (!item.startsWith('http')) return '_self'
-      return '_blank'
     }
 
     const input = ref(null as HTMLInputElement | null)
     onMounted(() => input.value?.focus())
 
-    return { input, items, add, getHref, getTarget, remove }
+    return { input, itemIds, add }
   }
 })
 </script>

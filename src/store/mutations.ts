@@ -1,5 +1,5 @@
 import { MutationTree } from 'vuex'
-import { save, State } from './state'
+import { StackItem, State } from './state'
 
 export enum MutationTypes {
   ADD = 'ADD',
@@ -7,21 +7,17 @@ export enum MutationTypes {
 }
 
 export type Mutations<S = State> = {
-  [MutationTypes.ADD](state: S, item: string): void
-  [MutationTypes.REMOVE](state: S, item: string): void
+  [MutationTypes.ADD](state: S, item: StackItem): void
+  [MutationTypes.REMOVE](state: S, itemId: string): void
 }
 
 export const mutations: MutationTree<State> & Mutations = {
-  [MutationTypes.ADD](state, item: string) {
-    state.items.unshift(item)
-    save(state)
+  [MutationTypes.ADD](state, item) {
+    if (!item.id) return
+
+    state.items[item.id] = item
   },
-  [MutationTypes.REMOVE](state, item: string) {
-    const index = state.items.indexOf(item)
-
-    if (index === -1) return
-
-    state.items.splice(index, 1)
-    save(state)
+  [MutationTypes.REMOVE](state, itemId) {
+    delete state.items[itemId]
   }
 }

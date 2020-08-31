@@ -1,5 +1,7 @@
+export type StackItem = { id: string; created: string; content: string }
+
 const defaults = {
-  items: [] as string[]
+  items: {} as { [id: string]: StackItem }
 }
 
 export type State = typeof defaults
@@ -12,6 +14,7 @@ function load(): State | null {
   return JSON.parse(state)
 }
 
+// TODO: migrate
 export function save(state: State) {
   window.localStorage.setItem('store', JSON.stringify(state))
 }
