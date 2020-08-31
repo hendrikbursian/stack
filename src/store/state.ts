@@ -1,4 +1,14 @@
-export type StackItem = { id: string; created: string; content: string }
+export type StackItemMetadata = {
+  title?: string
+  description?: string
+}
+
+export type StackItem = {
+  id: string
+  created: string
+  content: string
+  metadata: StackItemMetadata
+}
 
 const defaults = {
   items: {} as { [id: string]: StackItem }

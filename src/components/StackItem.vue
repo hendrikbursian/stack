@@ -3,12 +3,23 @@
     :href="href"
     :target="target"
     rel="noopener noreferrer"
-    class="select-none bg-white hover:bg-green-200 ease-out rounded-md border-current border px-2 py-1 shadow-local flex items-center mb-1 cursor-pointer"
+    class="flex items-center px-2 py-1 mb-1 ease-out bg-white border border-current rounded-md cursor-pointer select-none hover:bg-green-200 shadow-local"
   >
-    <img src="favicon.ico" class="h-5 w-5" />
-    <div class="ml-2">{{ item.content }}</div>
+    <div class="flex flex-col w-full overflow-x-hidden">
+      <template v-if="metadata.title">
+        <div class="text-xs font-bold whitespace-no-wrap">
+          {{ metadata.title }}
+        </div>
+        <div class="text-xs text-gray-500 whitespace-no-wrap">
+          {{ content }}
+        </div>
+      </template>
+      <template v-else>
+        <div class="text-xs font-bold">{{ content }}</div>
+      </template>
+    </div>
 
-    <button class="ml-auto focus:outline-none" @click.prevent="remove">
+    <button class="ml-2 focus:outline-none" @click.prevent="remove">
       <svg
         width="12"
         height="12"
@@ -41,13 +52,11 @@ export default defineComponent({
     const store = useStore()
 
     const item = computed(() => store.getters.item(props.itemId))
-
     const href = computed(() => {
       if (!item.value.content.startsWith('http')) return
 
-      return item
+      return item.value.content
     })
-
     const target = computed(() => {
       return item.value.content.startsWith('http') ? '_blank' : '_self'
     })
@@ -56,7 +65,7 @@ export default defineComponent({
       store.dispatch(ActionTypes.REMOVE, props.itemId)
     }
 
-    return { href, target, item, remove }
+    return { href, target, remove, ...item.value }
   }
 })
 </script>

@@ -21,7 +21,6 @@
 import { defineComponent, computed, ref, onMounted } from 'vue'
 import { useStore } from './store'
 import StackItem from '@/components/StackItem.vue'
-import { StackItem as StackItemType } from './store/state'
 import { ActionTypes } from './store/actions'
 
 export default defineComponent({
@@ -38,13 +37,9 @@ export default defineComponent({
 
       if (!input.value) return
 
-      const newItem: StackItemType = {
-        id: '',
-        created: '',
-        content: input.value
-      }
+      const content = input.value
 
-      store.dispatch(ActionTypes.ADD, newItem)
+      store.dispatch(ActionTypes.ADD, content)
 
       input.value = ''
     }
